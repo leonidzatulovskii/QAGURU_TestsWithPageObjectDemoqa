@@ -4,6 +4,7 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import com.demoqa.pages.components.Calendar;
+import com.demoqa.pages.testData.Student;
 import com.github.javafaker.Faker;
 
 import static com.codeborne.selenide.Condition.text;
@@ -52,40 +53,38 @@ public class RegistrationFormPage {
         return this;
     }
 
-    public RegistrationFormPage fillForm(String gender, String year, String month,
-                         String day,String subject, String hobby, String state, String city) {
+    public RegistrationFormPage fillForm(Student student) {
         firstNameInput.setValue(firstName);
         lastNameInput.setValue(lastName);
         emailInput.setValue(email);
-        setGender(gender);
+        setGender(student.gender());
         phoneNumberInput.setValue(phoneNumber);
         dateOfBirthInput.click();
-        calendar.calendarDateSelect(year, month, day);
-        subjectsInput.setValue(subject).pressEnter();
-        setHobby(hobby);
+        calendar.calendarDateSelect(student.year(), student.month(), student.day());
+        subjectsInput.setValue(student.subject()).pressEnter();
+        setHobby(student.hobby());
         uploadPictureButton.uploadFromClasspath(filePath);
         addressInput.setValue(currentAddress);
         stateField.click();
-        setState(state);
+        setState(student.state());
         cityField.click();
-        setCity(city);
+        setCity(student.city());
         submitButton.click();
 
         return this;
     }
 
-    public RegistrationFormPage checkForm(String gender, String year, String month,
-                               String day,String subject, String hobby, String state, String city) {
+    public RegistrationFormPage checkForm(Student student) {
         checkField("Student Name", firstName + " " + lastName);
         checkField("Student Email", email);
-        checkField("Gender", gender);
+        checkField("Gender", student.gender());
         checkField("Mobile", phoneNumber);
-        checkField("Date of Birth", day + " " + month + "," + year);
-        checkField("Subjects", subject);
-        checkField("Hobbies", hobby);
+        checkField("Date of Birth", student.day() + " " + student.month() + "," + student.year());
+        checkField("Subjects", student.subject());
+        checkField("Hobbies", student.hobby());
         checkField("Picture", filePath);
         checkField("Address", currentAddress);
-        checkField("State and City", state + " " + city);
+        checkField("State and City", student.state() + " " + student.city());
 
         return this;
     }
